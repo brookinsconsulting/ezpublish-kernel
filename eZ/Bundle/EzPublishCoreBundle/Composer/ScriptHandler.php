@@ -21,6 +21,15 @@ class ScriptHandler extends DistributionBundleScriptHandler
      */
     public static function dumpAssets( CommandEvent $event )
     {
+        $env = $event->getIO()->ask(
+            "\033[1;37;41mWhich environment would you like to dump production assets for?\033[0m (Default 'prod', 'none' to skip)",
+            'prod'
+        );
+        if ( $env === 'none' )
+        {
+            return;
+        }
+
         $options = self::getOptions( $event );
         $appDir = $options['symfony-app-dir'];
         $webDir = $options['symfony-web-dir'];
@@ -37,7 +46,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
             return;
         }
 
-        static::executeCommand( $event, $appDir, 'assetic:dump --env=prod ' . escapeshellarg( $webDir ) );
+        static::executeCommand( $event, $appDir, 'assetic:dump --env=' . escapeshellarg( $env ) . ' ' . escapeshellarg( $webDir ) );
     }
 
     /**

@@ -39,4 +39,19 @@ class ScriptHandler extends DistributionBundleScriptHandler
 
         static::executeCommand( $event, $appDir, 'assetic:dump --env=prod ' . escapeshellarg( $webDir ) );
     }
+
+    /**
+     * Just dump help text on how to dump assets
+     *
+     * Typically to use this instead on composer update as dump command uses prod environment where cache is not cleared,
+     * causing it to sometimes crash when cache needs to be cleared.
+     *
+     * @param $event CommandEvent A instance
+     */
+    public static function dumpAssetsHelpText( CommandEvent $event )
+    {
+        $event->getIO()->write( "\033[1;36mTo dump eZ Publish production assets after composer update, execute the following:\033[0m" );
+        $event->getIO()->write( 'php ezpublish/console assetic:dump --env=prod web' );
+        $event->getIO()->write( '' );
+    }
 }
